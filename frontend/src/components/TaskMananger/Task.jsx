@@ -19,7 +19,7 @@ import AttendanceTracker from './Attendance.jsx'
 
 
 
-function Task() {
+function Task({user}) {
   // Initialize state from URL hash or default to 'home'
   const getInitialPage = () => {
     const hash = window.location.hash;
@@ -39,6 +39,11 @@ function Task() {
   
   // Track previous page to determine if we're navigating from home
   const previousPageRef = useRef('home');
+  
+  // Scroll to top when page changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
   
   // Update URL when currentPage changes
   useEffect(() => {
@@ -530,7 +535,7 @@ function Task() {
     img { max-width: 100%; display: block; }
 
     /* Smooth scroll */
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: auto; }
 
     .container { width: min(1100px, 92vw); margin-inline: auto; }
     .hero { padding: 64px 0 24px; }
@@ -768,8 +773,7 @@ function Task() {
           <span className="title-sub">College Life</span>
         </h1>
         <p className="subtitle">
-          Your complete digital companion for academic success and event planning. 
-          Track attendance, predict grades, and never miss important events again.
+          
         </p>
         
         {/* Decorative Elements - Visual enhancement dots and lines */}
@@ -827,7 +831,12 @@ function Task() {
           {/* Grade Prediction Tool - Calculate grades from CIE marks */}
           {currentPage === 'grades' && <GradePredictor onBack={() => setCurrentPage('home')} />}
           {/* Attendance Tracking Tool - Monitor class attendance */}
-          {currentPage === 'attendance' && <AttendanceTracker onBack={() => setCurrentPage('home')} />}
+{currentPage === 'attendance' && (
+  <AttendanceTracker
+    user={user}
+    onBack={() => setCurrentPage('home')}
+  />
+)}
         </>
       )}
     </>
